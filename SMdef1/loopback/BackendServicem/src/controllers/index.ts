@@ -14,3 +14,5 @@ export * from './torre.controller';
 export * from './propietario.controller';
 export * from './tiporesidente.controller';
 export * from './tipovehiculo.controller';
+export * from './parqueadero-tipo-vehiculo.controller';
+export * from './tipo-vehiculo-parqueadero.controller';
