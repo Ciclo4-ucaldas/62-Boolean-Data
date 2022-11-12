@@ -16,3 +16,4 @@ export * from './tiporesidente.controller';
 export * from './tipovehiculo.controller';
 export * from './parqueadero-tipo-vehiculo.controller';
 export * from './tipo-vehiculo-parqueadero.controller';
+export * from './propietario-tipo-residente.controller';

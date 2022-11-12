@@ -15,6 +15,10 @@ export class TipoResidente extends Entity {
   })
   desc_tipo_residente: string;
 
+  @property({
+    type: 'string',
+  })
+  propietarioId?: string;
 
   constructor(data?: Partial<TipoResidente>) {
     super(data);
