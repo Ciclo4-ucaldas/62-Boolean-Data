@@ -1,8 +1,9 @@
 import {inject, Getter} from '@loopback/core';
-import {DefaultCrudRepository, repository, BelongsToAccessor} from '@loopback/repository';
+import {DefaultCrudRepository, repository, BelongsToAccessor, HasManyRepositoryFactory} from '@loopback/repository';
 import {MongodbDataSource} from '../datasources';
-import {Parqueadero, ParqueaderoRelations, Apartamento} from '../models';
+import {Parqueadero, ParqueaderoRelations, Apartamento, TipoVehiculo} from '../models';
 import {ApartamentoRepository} from './apartamento.repository';
+import {TipoVehiculoRepository} from './tipo-vehiculo.repository';
 
 export class ParqueaderoRepository extends DefaultCrudRepository<
   Parqueadero,
@@ -12,10 +13,14 @@ export class ParqueaderoRepository extends DefaultCrudRepository<
 
   public readonly apartamento: BelongsToAccessor<Apartamento, typeof Parqueadero.prototype.id_parqueadero>;
 
+  public readonly susTiposVehiculos: HasManyRepositoryFactory<TipoVehiculo, typeof Parqueadero.prototype.id_parqueadero>;
+
   constructor(
-    @inject('datasources.Mongodb') dataSource: MongodbDataSource, @repository.getter('ApartamentoRepository') protected apartamentoRepositoryGetter: Getter<ApartamentoRepository>,
+    @inject('datasources.Mongodb') dataSource: MongodbDataSource, @repository.getter('ApartamentoRepository') protected apartamentoRepositoryGetter: Getter<ApartamentoRepository>, @repository.getter('TipoVehiculoRepository') protected tipoVehiculoRepositoryGetter: Getter<TipoVehiculoRepository>,
   ) {
     super(Parqueadero, dataSource);
+    this.susTiposVehiculos = this.createHasManyRepositoryFactoryFor('susTiposVehiculos', tipoVehiculoRepositoryGetter,);
+    this.registerInclusionResolver('susTiposVehiculos', this.susTiposVehiculos.inclusionResolver);
     this.apartamento = this.createBelongsToAccessorFor('apartamento', apartamentoRepositoryGetter,);
     this.registerInclusionResolver('apartamento', this.apartamento.inclusionResolver);
   }
